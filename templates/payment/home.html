@@ -1,2 +1,59 @@
-<h1>Payment Page</h1>
-<p>Payment system coming soon!</p>
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4 text-center">💳 Thanh Toán Đơn Hàng</h2>
+
+    <div class="row">
+        <!-- Thông tin đơn hàng -->
+        <div class="col-md-6">
+            <h4>🛒 Đơn Hàng Của Bạn</h4>
+            <table class="table table-bordered mt-3">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sách</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.book.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.book.price|floatformat:0|intcomma }} ₫</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="table-secondary">
+                        <td colspan="2" class="text-end fw-bold">Tổng cộng:</td>
+                        <td class="fw-bold">{{ total|floatformat:0|intcomma }} ₫</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Form nhập thông tin giao hàng -->
+        <div class="col-md-6">
+            <h4>🚚 Thông Tin Giao Hàng</h4>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="full_name" class="form-label">Họ và tên</label>
+                    <input type="text" name="full_name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label>
+                    <textarea name="address" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">🔐 Thanh toán ngay</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

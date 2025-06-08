@@ -1,30 +1,56 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Cart
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from .models import Cart,CartItem
 from book.models import Book
-from django.contrib import messages
+from django.shortcuts import render, redirect
+from customer.models import Customer
 
-@login_required
+
+@require_POST
 def add_to_cart(request, book_id):
-    # Get the book object based on book_id
+    user = request.user
+    customer = Customer.objects.get(user=user)
+
     book = get_object_or_404(Book, id=book_id)
+    cart, created = Cart.objects.get_or_create(customer=user) 
 
-    # If the user already has this book in their cart, just increment the quantity
-    cart_item, created = Cart.objects.get_or_create(user=request.user, book=book)
-
+    item, created = CartItem.objects.get_or_create(cart=cart, book=book)
     if not created:
-        # If the item already exists, increment the quantity
-        cart_item.quantity += 1
-    cart_item.save()
+        item.quantity += 1
+        item.save()
 
-    messages.success(request, f"{book.title} has been added to your cart!")
-    return redirect("cart_view")
+    return redirect('cart_view')
 
-# cart/views.py
-@login_required
+@require_POST
+def remove_from_cart(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, cart__customer=request.user)
+    item.delete()
+    return redirect('cart_view')
+
 def cart_view(request):
-    cart_items = Cart.objects.filter(user=request.user)
-    total_price = sum(item.book.price * item.quantity for item in cart_items)  # Assuming Book model has a `price` field
+    user = request.user
+    customer = Customer.objects.get(user=user)
 
-    return render(request, "cart/cart.html", {"cart_items": cart_items, "total_price": total_price})
+    cart, created = Cart.objects.get_or_create(customer=user)
+    cart_items = CartItem.objects.filter(cart=cart)
 
+    total = sum(item.book.price * item.quantity for item in cart_items)
+    return render(request, 'cart/cart_view.html', {
+        'cart_items': cart_items,
+        'total': sum(item.book.price * item.quantity for item in cart_items)
+    })
+
+@require_POST
+def update_quantity(request, item_id):
+    item = get_object_or_404(CartItem, id=item_id, cart__customer=request.user)
+    action = request.POST.get('action')
+
+    if action == 'increment':
+        item.quantity += 1
+        item.save()
+    elif action == 'decrement':
+        if item.quantity > 1:
+            item.quantity -= 1
+            item.save()
+    # Luôn trả về HttpResponse
+    return redirect('cart_view')

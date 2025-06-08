@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <title>{% block title %}My Site{% endblock %}</title>
+    <style>
+        .cart-heading {
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-heading i {
+            color: #0d6efd;
+            font-size: 1.8rem;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle !important;
+        }
+
+        .btn-outline-danger.btn-sm {
+            font-size: 0.875rem;
+            padding: 3px 10px;
+        }
+
+        .cart-summary {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 1.5rem;
+        }
+
+        .proceed-btn {
+            font-weight: 500;
+            padding: 10px 25px;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .proceed-btn:hover {
+            background-color: #198754 !important;
+        }
+
+        .nav-link {
+            display: inline-block;
+            margin-right: 10px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background-color: #f8f9fa;
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #0d6efd;
+        }
+
+        .nav-link:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to My Bookstore</h1>
+        <nav style="margin: 10px 0;">
+            <a href="{% url 'home' %}" class="nav-link">Home</a>
+            <a href="{% url 'cart_view' %}" class="nav-link">Cart</a>
+        </nav>
+    </header>
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+
+    <hr>
+    <footer>
+        <p>&copy; 2025 My Bookstore</p>
+    </footer>
+</body>
+
+</html>
