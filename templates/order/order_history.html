@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Lịch sử đơn hàng</h2>
+{% if orders %}
+    <ul>
+    {% for order in orders %}
+        <li>
+            Đơn hàng #{{ order.id }} - {{ order.created_at }} - {{ order.status }}
+            <ul>
+            {% for item in order.items.all %}
+                <li>{{ item.book.title }} x {{ item.quantity }} ({{ item.price|floatformat:0 }})</li>
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Bạn chưa có đơn hàng nào.</p>
+{% endif %}
+{% endblock %}

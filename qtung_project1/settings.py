@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import sys
 from pathlib import Path
 import os
 
@@ -33,6 +33,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+sys.path.insert(0, os.path.join(BASE_DIR, 'services'))
+
+DATABASE_ROUTERS = ['qtung_project1.db_router.MicroserviceRouter']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,16 +50,20 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',  # Optional for social login
+    'allauth.socialaccount.providers.google',
 
-    'customer.apps.CustomerConfig',
-    'cart',
-    'book',
-    'order',
-    'payment',
-    'shipment',
-    'comment_recommendation',
-    'accounts',
+    'admin_interface',
+    'colorfield',
+
+    # Apps trong services
+    'services.cart_service.cart.apps.CartConfig',
+    'services.order_service.order.apps.OrderConfig',
+    'services.payment_service.payment.apps.PaymentConfig',
+    'services.shipment_service.shipment.apps.ShipmentConfig',
+    'services.comment_service.comment_recommendation.apps.CommentRecommendationConfig',
+    'services.book_service.book.apps.BookConfig',
+    'services.accounts_service.accounts.apps.AccountsConfig',
+    'services.customer_service.customer.apps.CustomerConfig',
 ]
 
 MIDDLEWARE = [
@@ -97,7 +105,27 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    'cart': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_cart.sqlite3',
+    },
+    'order': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_order.sqlite3',
+    },
+    'payment': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_payment.sqlite3',
+    },
+    'shipment': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_shipment.sqlite3',
+    },
+    'comment': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db_comment.sqlite3',
+    },
 }
 
 
@@ -159,3 +187,5 @@ ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 
+
+DATABASE_ROUTERS = ['qtung_project1.db_router.MicroserviceRouter']

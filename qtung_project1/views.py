@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from book.models import Book  # Assuming you have a Book model
+from services.book_service.book.models import Book  # Assuming you have a Book model
 from django.db.models import Q
+
 
 def home_view(request, category=None):
     query = request.GET.get('q', '')

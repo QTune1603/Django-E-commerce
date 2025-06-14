@@ -16,9 +16,9 @@ urlpatterns = [
 
     # Các app chính
     path('home/<str:category>/', home_view, name='book_category'),
-    path('payment/', include('payment.urls')),   # ✅ sửa import và include
-    path('cart/', include('cart.urls')),
-    path('customer/', include('customer.urls')),
-    path('order/', include('order.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('payment/', include('services.payment_service.payment.urls')),   # ✅ sửa import và include
+    path('cart/', include('services.cart_service.cart.urls')),
+    path('customer/', include('services.customer_service.customer.urls')),
+    path('order/', include('services.order_service.order.urls')),
+    path('accounts/', include('services.accounts_service.accounts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

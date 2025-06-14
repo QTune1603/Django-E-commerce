@@ -22,7 +22,7 @@
                 {% for item in cart_items %}
                 <tr>
                     <td>{{ item.book.title }}</td>
-                    <td>{{ item.book.price|intcomma }} ₫</td>
+                    <td>{{ item.book_price|intcomma }} ₫</td>
                     <td>
                         <form action="{% url 'update_quantity' item.id %}" method="post" style="display:inline;">
                             {% csrf_token %}
@@ -38,7 +38,7 @@
                             <button class="btn btn-outline-secondary btn-sm">+</button>
                         </form>
                     </td>
-                    <td>{{ item.book.price|mul:item.quantity|intcomma }} ₫</td>
+                    <td>{{ item.book_price|mul:item.quantity|intcomma }} ₫</td>
                     <td>
                         <form method="post" action="{% url 'remove_from_cart' item.id %}">
                             {% csrf_token %}
